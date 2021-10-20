@@ -19,8 +19,8 @@ This application has been dockerized, and can be built and run through Visual St
 OR
 
 1. Open a command prompt and navigate to the root folder of the project
-2. Run the following commands (wihtout the quotes):
-	"docker build -t lightfeatherbackendchallenge ."
+2. Run the following commands (without the quotes):\
+	"docker build -t lightfeatherbackendchallenge ."\
 	"docker run -d -p 8080:80 --name lightfeather lightfeatherbackendchallenge"
 3. You should be able to access the application through a browser on your local machine using "localhost:8080/api/supervisors"
 
