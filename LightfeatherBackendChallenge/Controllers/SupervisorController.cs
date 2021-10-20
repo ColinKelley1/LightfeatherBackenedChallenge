@@ -13,17 +13,16 @@ using Microsoft.Extensions.Logging;
 namespace LightfeatherBackendChallenge.Controllers
 {
     [ApiController]
-    [Route("api")]
     public class SupervisorController : ControllerBase
     {
 
         [HttpGet]
-        [Route("supervisors")]
+        [Route("api/supervisors")]
         public async Task<IActionResult> GetSupervisorsAsync(string path)
         {
             HttpClient client = new HttpClient();
 
-            string awsURL = $"https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers";        //Todo, make this changeable
+            string awsURL = $"https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers"; 
 
             IEnumerable<Supervisor> managers = null;
 
@@ -55,7 +54,7 @@ namespace LightfeatherBackendChallenge.Controllers
         }
 
         [HttpPut]
-        [Route("submit")]
+        [Route("api/submit")]
         public IActionResult PutSupervisor(SupervisorSubmission supervisor)
         {
             if (!ModelState.IsValid)

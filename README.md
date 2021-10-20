@@ -14,7 +14,7 @@ This application has been dockerized, and can be built and run through Visual St
 1. Open the solution for the project.
 2. At the top of the window, be sure that "Docker" is selected instead of "IIS" or "LightfeatherBackendChallenge"
 3. Click on "Docker" to build and run. Visual Studio should build, and a new docker container should appear in your Docker client.
-4. A new Browser should automatically open. You can view the console by clicking on the container in the Docker client.
+4. A new Browser should automatically open(This may take a few moments). You can view the console by clicking on the container in the Docker client.
 
 OR
 
