@@ -15,6 +15,12 @@ namespace LightfeatherBackendChallenge.Controllers
     [ApiController]
     public class SupervisorController : ControllerBase
     {
+        private ILogger _logger;
+
+        public SupervisorController(ILogger<SupervisorController> logger)
+        {
+            _logger = logger;
+        }
 
         [HttpGet]
         [Route("api/supervisors")]
@@ -22,7 +28,6 @@ namespace LightfeatherBackendChallenge.Controllers
         {
             HttpClient client = new HttpClient();
             string awsURL = $"https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers"; 
-            HttpResponseMessage response = await client.GetAsync(awsURL);
 
             IEnumerable<Supervisor> managers = null;
             //System.Text.Json will not deserialize unless supplied this camelCase option. Alternative is Newtonsoft
@@ -31,12 +36,15 @@ namespace LightfeatherBackendChallenge.Controllers
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
+            HttpResponseMessage response = await client.GetAsync(awsURL);
             if (response.IsSuccessStatusCode)
             {
+                _logger.LogInformation("Response successful. Parsing Json");
                 managers = await JsonSerializer.DeserializeAsync<IEnumerable<Supervisor>>(await response.Content.ReadAsStreamAsync(), options);
             }
             else
             {
+                _logger.LogInformation("Response unsuccessful. Returning Internal Server Error");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
@@ -63,8 +71,9 @@ namespace LightfeatherBackendChallenge.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-
+              
                 Console.WriteLine("");
+                Console.WriteLine("--PUT: Information recieved--");
                 Console.WriteLine("Supervisor: " + supervisor.Supervisor);
                 Console.WriteLine("First: " + supervisor.FirstName);
                 Console.WriteLine("Last: " + supervisor.LastName);
@@ -72,9 +81,9 @@ namespace LightfeatherBackendChallenge.Controllers
                 if (!string.IsNullOrEmpty(supervisor.PhoneNumber))
                     Console.WriteLine("Phone: " + supervisor.PhoneNumber);
 
-                if (!string.IsNullOrEmpty(supervisor.Email))
+                if (!string.IsNullOrEmpty(supervisor.Email))             
                     Console.WriteLine("Email: " + supervisor.Email);
-
+                                
                 return Ok();
             }
             catch (Exception e)
