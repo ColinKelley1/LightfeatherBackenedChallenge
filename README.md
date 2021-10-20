@@ -1,9 +1,9 @@
 This is a .NET Core 3.1 Web API application that exposes an api.
 
 
-IN ORDER TO INSTALL AND RUN
+#IN ORDER TO INSTALL AND RUN#
 --Before Running--
-download the repo from github and extract to desired location.
+Download the repo from github and extract to desired location.
 You must have the docker Desktop client installed on your machine.
 This was tested using a Windows 10 machine.
 
