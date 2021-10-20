@@ -16,6 +16,14 @@ This application has been dockerized, and can be built and run through Visual St
 3. Click on "Docker" to build and run. Visual Studio should build, and a new docker container should appear in your Docker client.
 4. A new Browser should automatically open. You can view the console by clicking on the container in the Docker client.
 
+OR
+
+1. Open a command prompt and navigate to the root folder of the project
+2. Run the following commands (wihtout the quotes):
+	"docker build -t lightfeatherbackendchallenge ."
+	"docker run -d -p 8080:80 --name lightfeather lightfeatherbackendchallenge"
+3. You should be able to access the application through a browser on your local machine using "localhost:8080/api/supervisors"
+
 \
 --Other--\
 It is also possible to run the application locally.
