@@ -44,12 +44,13 @@ namespace LightfeatherBackendChallenge.Controllers
             }
             else
             {
-                _logger.LogInformation("Response unsuccessful. Returning Internal Server Error");
+                _logger.LogError("Response unsuccessful. Returning Internal Server Error");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             if(managers == null)
             {
+                _logger.LogError("No managers pulled from URL.");
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
@@ -88,6 +89,7 @@ namespace LightfeatherBackendChallenge.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return BadRequest(e.Message);
             }
         }
