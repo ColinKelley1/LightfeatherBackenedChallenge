@@ -21,13 +21,10 @@ namespace LightfeatherBackendChallenge.Controllers
         public async Task<IActionResult> GetSupervisorsAsync(string path)
         {
             HttpClient client = new HttpClient();
-
             string awsURL = $"https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers"; 
-
-            IEnumerable<Supervisor> managers = null;
-
             HttpResponseMessage response = await client.GetAsync(awsURL);
 
+            IEnumerable<Supervisor> managers = null;
             //System.Text.Json will not deserialize unless supplied this camelCase option. Alternative is Newtonsoft
             var options = new JsonSerializerOptions()
             {
@@ -43,10 +40,13 @@ namespace LightfeatherBackendChallenge.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
+            if(managers == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+
             var orderedManagers = managers.Where(m => !int.TryParse(m.Jurisdiction, out int throwAway))
-                .OrderBy(m => m.Jurisdiction)
-                .ThenBy(m => m.LastName)
-                .ThenBy(m => m.FirstName);
+                .OrderBy(m => m.Jurisdiction).ThenBy(m => m.LastName).ThenBy(m => m.FirstName);
 
             var managerReturn = orderedManagers.Select(m => string.Format("{0} - {1},{2}", m.Jurisdiction, m.LastName, m.FirstName)).ToList();
 
@@ -57,23 +57,30 @@ namespace LightfeatherBackendChallenge.Controllers
         [Route("api/submit")]
         public IActionResult PutSupervisor(SupervisorSubmission supervisor)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                Console.WriteLine("");
+                Console.WriteLine("Supervisor: " + supervisor.Supervisor);
+                Console.WriteLine("First: " + supervisor.FirstName);
+                Console.WriteLine("Last: " + supervisor.LastName);
+
+                if (!string.IsNullOrEmpty(supervisor.PhoneNumber))
+                    Console.WriteLine("Phone: " + supervisor.PhoneNumber);
+
+                if (!string.IsNullOrEmpty(supervisor.Email))
+                    Console.WriteLine("Email: " + supervisor.Email);
+
+                return Ok();
             }
-
-            Console.WriteLine("");
-            Console.WriteLine("Supervisor: "+supervisor.Supervisor);
-            Console.WriteLine("First: "+supervisor.FirstName);
-            Console.WriteLine("Last: " + supervisor.LastName);
-
-            if(!string.IsNullOrEmpty(supervisor.PhoneNumber))
-                Console.WriteLine("Phone: "+supervisor.PhoneNumber);
-
-            if (!string.IsNullOrEmpty(supervisor.Email))
-                Console.WriteLine("Email: " + supervisor.Email);
-
-            return Ok();
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
 
